@@ -27,21 +27,7 @@ public class Arvore {
                 atual.esq = inserir(atual.esq, valor);
             }
         }
-        atual.fatBal = calculaBalanecamento(atual);
-        if (atual.fatBal > 1) {
-            if (atual.dir != null && atual.dir.fatBal == 1) {
-                atual = rotacaoSimplesEsquerda(atual);
-            } else {
-                atual = rotacaoDuplaEsquerda(atual);
-            }
-        } else if (atual.fatBal < -1) {
-            if (atual.esq != null && atual.esq.fatBal == -1) {
-                atual = rotacaoSimplesDireita(atual);
-            } else {
-                atual = rotacaoDuplaDireita(atual);
-            }
-        }
-        return atual;
+        return rebalancear(atual);
     }
 
     public No buscar(long chave) {
@@ -265,38 +251,6 @@ public class Arvore {
         return alturaDireita - alturaEsquerda;
     }
 
-//    private int alturaArvoreDireita(No no) {
-//        int altura = 0;
-//        while (no != null) {
-//            if (no.dir != null) {
-//                no = no.dir;
-//                altura++;
-//            } else if (no.esq != null) {
-//                no = no.esq;
-//                altura++;
-//            } else {
-//                no = null;
-//            }
-//        }
-//        return altura;
-//    }
-//
-//    private int alturaArvoreEsquerda(No no) {
-//        int altura = 0;
-//        while (no != null) {
-//            if (no.esq != null) {
-//                no = no.esq;
-//                altura++;
-//            } else if (no.dir != null) {
-//                no = no.dir;
-//                altura++;
-//            } else {
-//                no = null;
-//            }
-//        }
-//        return altura;
-//    }
-
     private No rotacaoSimplesEsquerda(No atual) {
         No novaRaiz = atual.dir;
         atual.dir = null;
@@ -331,7 +285,29 @@ public class Arvore {
         a.inserir(1);
         a.inserir(2);
         a.inserir(3);
+        a.inserir(10);
+        a.inserir(11);
+        a.inserir(4);
+        a.inserir(6);
 
+    }
+
+    private No rebalancear(No atual) {
+        atual.fatBal = calculaBalanecamento(atual);
+        if (atual.fatBal > 1) {
+            if (atual.dir != null && atual.dir.fatBal == 1) {
+                atual = rotacaoSimplesEsquerda(atual);
+            } else {
+                atual = rotacaoDuplaEsquerda(atual);
+            }
+        } else if (atual.fatBal < -1) {
+            if (atual.esq != null && atual.esq.fatBal == -1) {
+                atual = rotacaoSimplesDireita(atual);
+            } else {
+                atual = rotacaoDuplaDireita(atual);
+            }
+        }
+        return atual;
     }
 
 }
