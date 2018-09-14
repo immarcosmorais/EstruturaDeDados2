@@ -11,8 +11,16 @@ package Arvore.AVL;
  */
 class No {
 
-    public long item;
+    public long valor;
     public No dir;
     public No esq;
+    public int fatBal;
+    
+    public No(int valor) {
+        this.esq = null;
+        this.dir = null;
+        this.valor = valor;
+        this.fatBal = fatBal;
+    }
     
 }

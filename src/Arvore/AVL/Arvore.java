@@ -7,62 +7,50 @@ package Arvore.AVL;
 
 public class Arvore {
 
-    private No raiz; // raiz
+    private No raiz;
 
     public Arvore() {
         raiz = null;
-    } // inicializa 
-
-    public void inserir(long v) {
-        No novo = new No(); // cria um novo Nó
-        novo.item = v; // atribui o valor recebido ao item de dados do Nó
-        novo.dir = null;
-        novo.esq = null;
-
-        if (raiz == null) {
-            raiz = novo;
-        } else { // se nao for a raiz
-            No atual = raiz;
-            No anterior;
-            while (true) {
-                anterior = atual;
-                if (v <= atual.item) { // ir para esquerda
-                    atual = atual.esq;
-                    if (atual == null) {
-                        anterior.esq = novo;
-                        return;
-                    }
-                } // fim da condição ir a esquerda
-                else { // ir para direita
-                    atual = atual.dir;
-                    if (atual == null) {
-                        anterior.dir = novo;
-                        return;
-                    }
-                } // fim da condição ir a direita
-            } // fim do laço while
-        } // fim do else não raiz
-
     }
 
-    private void inserir() {
-
+    public void inserir(int valor) {
+        raiz = inserir(raiz, valor);
     }
 
-    /**
-     * *
-     * Mesmo método utilizado na busca binária
-     *
-     * @param chave
-     * @return atual
-     */
+    private No inserir(No atual, int valor) {
+        if (atual == null) {
+            atual = new No(valor);
+        } else {
+            if (valor > atual.valor) {
+                atual.dir = inserir(atual.dir, valor);
+            } else {
+                atual.esq = inserir(atual.esq, valor);
+            }
+        }
+        atual.fatBal = calculaBalanecamento(atual);
+        if (atual.fatBal > 1) {
+            if (atual.dir != null && atual.dir.fatBal == 1) {
+                atual = rotacaoSimplesEsquerda(atual);
+            } else {
+                atual = rotacaoDuplaEsquerda(atual);
+            }
+        } else if (atual.fatBal < -1) {
+            if (atual.esq != null && atual.esq.fatBal == -1) {
+                atual = rotacaoSimplesDireita(atual);
+            } else {
+                atual = rotacaoDuplaDireita(atual);
+            }
+        }
+        return atual;
+    }
+
     public No buscar(long chave) {
         if (raiz == null) {
             return null;
         }
         No atual = raiz;
-        while (atual.item != chave) {
-            if (chave < atual.item) {
+        while (atual.valor != chave) {
+            if (chave < atual.valor) {
                 atual = atual.esq;
             } else {
                 atual = atual.dir;
@@ -83,9 +71,9 @@ public class Arvore {
         boolean filho_esq = true;
 
         // ****** Buscando o valor **********
-        while (atual.item != v) { // enquanto nao encontrou
+        while (atual.valor != v) { // enquanto nao encontrou
             pai = atual;
-            if (v < atual.item) { // caminha para esquerda
+            if (v < atual.valor) { // caminha para esquerda
                 atual = atual.esq;
                 filho_esq = true; // é filho a esquerda? sim
             } else { // caminha para direita
@@ -186,22 +174,22 @@ public class Arvore {
         System.out.print("\n Quantidade de folhas: " + folhas(raiz));
         System.out.print("\n Quantidade de Nós: " + contarNos(raiz));
         if (raiz != null) {  // se arvore nao esta vazia
-            System.out.print("\n Valor minimo: " + min().item);
-            System.out.println("\n Valor maximo: " + max().item);
+            System.out.print("\n Valor minimo: " + min().valor);
+            System.out.println("\n Valor maximo: " + max().valor);
         }
     }
 
     public void inOrder(No atual) {
         if (atual != null) {
             inOrder(atual.esq);
-            System.out.print(atual.item + " ");
+            System.out.print(atual.valor + " ");
             inOrder(atual.dir);
         }
     }
 
     public void preOrder(No atual) {
         if (atual != null) {
-            System.out.print(atual.item + " ");
+            System.out.print(atual.valor + " ");
             preOrder(atual.esq);
             preOrder(atual.dir);
         }
@@ -211,7 +199,7 @@ public class Arvore {
         if (atual != null) {
             posOrder(atual.esq);
             posOrder(atual.dir);
-            System.out.print(atual.item + " ");
+            System.out.print(atual.valor + " ");
         }
     }
 
@@ -265,38 +253,64 @@ public class Arvore {
         return anterior;
     }
 
-    private void calculaBalanecamento(No no) {
-//        if (no == null || no) {
-//            
-//        }
+    private int calculaBalanecamento(No no) {
+        return alturaArvoreDireita(no) - alturaArvoreEsquerda(no);
     }
 
-    public int alturaArvoreDireita(No dir) {
-        if (dir.dir != null) {
-            return alturaArvoreDireita(dir.dir) + 1;
+    private int alturaArvoreDireita(No no) {
+        if (no != null) {
+            if (no.dir != null) {
+                return alturaArvoreEsquerda(no.dir) + 1;
+            } else if (no.esq != null) {
+                return alturaArvoreEsquerda(no.esq) + 1;
+            }
         }
         return 0;
     }
 
-    public int alturaArvoreEsquerda(No esq) {
-        if (esq.esq != null) {
-            return alturaArvoreEsquerda(esq.esq) + 1;
+    private int alturaArvoreEsquerda(No no) {
+        if (no != null) {
+            if (no.esq != null) {
+                return alturaArvoreEsquerda(no.esq) + 1;
+            } else if (no.dir != null) {
+                return alturaArvoreEsquerda(no.dir) + 1;
+            }
         }
         return 0;
+    }
+
+    private No rotacaoSimplesEsquerda(No atual) {
+        No novaRaiz = atual.dir;
+        atual.dir = null;
+        novaRaiz.esq = atual;
+        return novaRaiz;
+    }
+
+    private No rotacaoSimplesDireita(No atual) {
+        No novaRaiz = atual.esq;
+        atual.esq = null;
+        novaRaiz.dir = atual;
+        return novaRaiz;
+    }
+
+    private No rotacaoDuplaEsquerda(No atual) {
+        atual.esq = rotacaoSimplesDireita(atual.esq);
+        atual = rotacaoSimplesEsquerda(atual);
+        return atual;
+    }
+
+    private No rotacaoDuplaDireita(No atual) {
+        atual.dir = rotacaoSimplesEsquerda(atual.dir);
+        atual = rotacaoSimplesDireita(atual);
+        return atual;
     }
 
     public static void main(String[] args) {
         Arvore a = new Arvore();
-        a.inserir(5);
-        a.inserir(5);
-        a.inserir(5);
-        a.inserir(8);
         a.inserir(7);
-        a.inserir(1);
-        a.inserir(88);
-        a.inserir(-8);
-        System.out.println(a.alturaArvoreDireita(a.raiz));
-        System.out.println(a.alturaArvoreEsquerda(a.raiz));
+        a.inserir(9);
+        a.inserir(8);
+
     }
 
 }
