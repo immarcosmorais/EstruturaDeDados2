@@ -45,22 +45,33 @@ public class Arvore {
 
     }
 
+    private void inserir() {
+
+    }
+
+    /**
+     * *
+     * Mesmo método utilizado na busca binária
+     *
+     * @param chave
+     * @return atual
+     */
     public No buscar(long chave) {
         if (raiz == null) {
             return null;
         }
         No atual = raiz;
-        while (atual.item != chave) { 
+        while (atual.item != chave) {
             if (chave < atual.item) {
-                atual = atual.esq; 
+                atual = atual.esq;
             } else {
-                atual = atual.dir; 
+                atual = atual.dir;
             }
             if (atual == null) {
                 return null;
             }
-        } // fim laço while
-        return atual; // terminou o laço while e chegou aqui é pq encontrou item
+        }
+        return atual;
     }
 
     public boolean remover(long v) {
@@ -252,6 +263,40 @@ public class Arvore {
             atual = atual.dir;
         }
         return anterior;
+    }
+
+    private void calculaBalanecamento(No no) {
+//        if (no == null || no) {
+//            
+//        }
+    }
+
+    public int alturaArvoreDireita(No dir) {
+        if (dir.dir != null) {
+            return alturaArvoreDireita(dir.dir) + 1;
+        }
+        return 0;
+    }
+
+    public int alturaArvoreEsquerda(No esq) {
+        if (esq.esq != null) {
+            return alturaArvoreEsquerda(esq.esq) + 1;
+        }
+        return 0;
+    }
+
+    public static void main(String[] args) {
+        Arvore a = new Arvore();
+        a.inserir(5);
+        a.inserir(5);
+        a.inserir(5);
+        a.inserir(8);
+        a.inserir(7);
+        a.inserir(1);
+        a.inserir(88);
+        a.inserir(-8);
+        System.out.println(a.alturaArvoreDireita(a.raiz));
+        System.out.println(a.alturaArvoreEsquerda(a.raiz));
     }
 
 }
