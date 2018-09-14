@@ -254,30 +254,48 @@ public class Arvore {
     }
 
     private int calculaBalanecamento(No no) {
-        return alturaArvoreDireita(no) - alturaArvoreEsquerda(no);
+        int alturaDireita = 0;
+        int alturaEsquerda = 0;
+        if (no.dir != null) {
+            alturaDireita = altura(no.dir) + 1;
+        }
+        if (no.esq != null) {
+            alturaEsquerda = altura(no.esq) + 1;
+        }
+        return alturaDireita - alturaEsquerda;
     }
 
-    private int alturaArvoreDireita(No no) {
-        if (no != null) {
-            if (no.dir != null) {
-                return alturaArvoreEsquerda(no.dir) + 1;
-            } else if (no.esq != null) {
-                return alturaArvoreEsquerda(no.esq) + 1;
-            }
-        }
-        return 0;
-    }
-
-    private int alturaArvoreEsquerda(No no) {
-        if (no != null) {
-            if (no.esq != null) {
-                return alturaArvoreEsquerda(no.esq) + 1;
-            } else if (no.dir != null) {
-                return alturaArvoreEsquerda(no.dir) + 1;
-            }
-        }
-        return 0;
-    }
+//    private int alturaArvoreDireita(No no) {
+//        int altura = 0;
+//        while (no != null) {
+//            if (no.dir != null) {
+//                no = no.dir;
+//                altura++;
+//            } else if (no.esq != null) {
+//                no = no.esq;
+//                altura++;
+//            } else {
+//                no = null;
+//            }
+//        }
+//        return altura;
+//    }
+//
+//    private int alturaArvoreEsquerda(No no) {
+//        int altura = 0;
+//        while (no != null) {
+//            if (no.esq != null) {
+//                no = no.esq;
+//                altura++;
+//            } else if (no.dir != null) {
+//                no = no.dir;
+//                altura++;
+//            } else {
+//                no = null;
+//            }
+//        }
+//        return altura;
+//    }
 
     private No rotacaoSimplesEsquerda(No atual) {
         No novaRaiz = atual.dir;
@@ -294,13 +312,13 @@ public class Arvore {
     }
 
     private No rotacaoDuplaEsquerda(No atual) {
-        atual.esq = rotacaoSimplesDireita(atual.esq);
+        atual.dir = rotacaoSimplesDireita(atual.dir);
         atual = rotacaoSimplesEsquerda(atual);
         return atual;
     }
 
     private No rotacaoDuplaDireita(No atual) {
-        atual.dir = rotacaoSimplesEsquerda(atual.dir);
+        atual.esq = rotacaoSimplesEsquerda(atual.esq);
         atual = rotacaoSimplesDireita(atual);
         return atual;
     }
@@ -310,6 +328,9 @@ public class Arvore {
         a.inserir(7);
         a.inserir(9);
         a.inserir(8);
+        a.inserir(1);
+        a.inserir(2);
+        a.inserir(3);
 
     }
 
