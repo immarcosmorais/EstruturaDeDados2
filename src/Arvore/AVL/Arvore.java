@@ -254,14 +254,26 @@ public class Arvore {
     private No rotacaoSimplesEsquerda(No atual) {
         No novaRaiz = atual.dir;
         atual.dir = null;
-        novaRaiz.esq = atual;
+        if (novaRaiz.esq == null) {
+            novaRaiz.esq = atual;
+        } else {
+            No aux = novaRaiz.esq;
+            novaRaiz.esq = atual;
+            novaRaiz.dir = aux;
+        }
+
         return novaRaiz;
     }
 
     private No rotacaoSimplesDireita(No atual) {
         No novaRaiz = atual.esq;
         atual.esq = null;
-        novaRaiz.dir = atual;
+        if (novaRaiz.dir == null) {
+            novaRaiz.dir = atual;
+        } else {
+            No aux = novaRaiz.dir;
+            novaRaiz.esq = aux;
+        }
         return novaRaiz;
     }
 
