@@ -13,11 +13,11 @@ public class Arvore {
         raiz = null;
     }
 
-    public void inserir(int valor) {
+    public void inserir(long valor) {
         raiz = inserir(raiz, valor);
     }
 
-    private No inserir(No atual, int valor) {
+    private No inserir(No atual, long valor) {
         if (atual == null) {
             atual = new No(valor);
         } else {
@@ -257,9 +257,11 @@ public class Arvore {
         if (novaRaiz.esq == null) {
             novaRaiz.esq = atual;
         } else {
+            //Colocar o método insert aqui
             No aux = novaRaiz.esq;
             novaRaiz.esq = atual;
-            novaRaiz.dir = aux;
+//            novaRaiz.dir = aux;
+            novaRaiz.dir = inserir(novaRaiz.dir, aux.valor);
         }
 
         return novaRaiz;
@@ -272,7 +274,9 @@ public class Arvore {
             novaRaiz.dir = atual;
         } else {
             No aux = novaRaiz.dir;
-            novaRaiz.esq = aux;
+            novaRaiz.dir = atual;
+//            novaRaiz.esq = aux;
+            novaRaiz.esq = inserir(novaRaiz.esq, aux.valor);
         }
         return novaRaiz;
     }

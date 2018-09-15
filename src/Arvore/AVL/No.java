@@ -16,7 +16,7 @@ class No {
     public No esq;
     public int fatBal;
     
-    public No(int valor) {
+    public No(long valor) {
         this.esq = null;
         this.dir = null;
         this.valor = valor;
