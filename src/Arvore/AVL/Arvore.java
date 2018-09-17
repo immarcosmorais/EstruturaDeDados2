@@ -118,6 +118,8 @@ public class Arvore {
             sucessor.esq = atual.esq; // acertando o ponteiro a esquerda do sucessor agora que ele assumiu 
             // a posição correta na arvore   
         }
+        
+        pai = rebalancear(pai);
 
         return true;
     }
@@ -257,10 +259,8 @@ public class Arvore {
         if (novaRaiz.esq == null) {
             novaRaiz.esq = atual;
         } else {
-            //Colocar o método insert aqui
             No aux = novaRaiz.esq;
             novaRaiz.esq = atual;
-//            novaRaiz.dir = aux;
             novaRaiz.dir = inserir(novaRaiz.dir, aux.valor);
         }
 
@@ -275,7 +275,6 @@ public class Arvore {
         } else {
             No aux = novaRaiz.dir;
             novaRaiz.dir = atual;
-//            novaRaiz.esq = aux;
             novaRaiz.esq = inserir(novaRaiz.esq, aux.valor);
         }
         return novaRaiz;
